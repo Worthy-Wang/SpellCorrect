@@ -43,10 +43,24 @@ void CloseCallBack(const TcpConnectionPtr &ptr)
     cout << "client has broken up " << ptr->Address() << endl;
 }
 
-int main()
+/*
+初始化字典的模式：
+线下模式：offline
+读取语料库中的内容，进行创建词典，在进行线上部分之前必须先经过线下部分。
+
+线上模式:online
+根据客户端的内容进行计算，并返回结果
+*/
+
+void offline()
+{
+    //读取data中的语料库
+    Mydict::getpInstance()->initDict(Configuration::getpInstance()->getConfigMap()["dir"], Configuration::getpInstance()->getConfigMap()["ch_dir"], Configuration::getpInstance()->getConfigMap()["cache_dir"]);
+}
+
+void online()
 {
     //初始化字典
-    // Mydict::getpInstance()->initDict(Configuration::getpInstance()->getConfigMap()["dir"], Configuration::getpInstance()->getConfigMap()["ch_dir"], Configuration::getpInstance()->getConfigMap()["cache_dir"]);
     Mydict::getpInstance()->initDict(Configuration::getpInstance()->getConfigMap()["cache_dir"]);
 
     //启动线程池，用于处理任务
@@ -64,6 +78,9 @@ int main()
     server.setMessageCallBack(MessageCallBack);
     server.setCloseCallBack(CloseCallBack);
     server.start();
+}
 
+int main()
+{
     return 0;
 }
