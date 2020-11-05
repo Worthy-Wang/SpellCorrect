@@ -63,17 +63,21 @@ namespace wd
         Json::Value array;
         Json::Value root;
         Json::Value wordRes;
-
+        vector<MyResult> vec;
         while (!_priQue.empty())
         {
             MyResult res = _priQue.top();
+            vec.push_back(res);
+            _priQue.pop();
+        }
+        for (auto it = vec.rbegin(); it != vec.rend(); it++)
+        {
+            MyResult res = *it;
             wordRes["word"] = res._word;
             wordRes["frequency"] = res._frequency;
             wordRes["min_distance"] = res._distance;
             root.append(wordRes);
-            _priQue.pop();
         }
-
         array["array"] = Json::Value(root);
         return array.toStyledString();
     }

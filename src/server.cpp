@@ -82,5 +82,6 @@ void online()
 
 int main()
 {
+    online();
     return 0;
 }
